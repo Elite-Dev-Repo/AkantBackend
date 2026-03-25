@@ -21,7 +21,7 @@ EMAIL_FROM = os.getenv("EMAIL_FROM", "Akant Team <onboarding@resend.dev>")
 # ─── Core ────────────────────────────────────────────────────────────────────
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost", cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akantbackend.onrender.com", cast=Csv())
 
 # ─── Apps ─────────────────────────────────────────────────────────────────────
 DJANGO_APPS = [
