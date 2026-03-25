@@ -1,11 +1,12 @@
 """
-Akant App - Production-Ready Django Settings
+akant App - Production-Ready Django Settings
 """
 import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
 from dotenv import load_dotenv
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,7 +15,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # ─── Environment Variables ────────────────────────────────────────────────────
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
-EMAIL_FROM = os.getenv("EMAIL_FROM", "Akant Team <onboarding@resend.dev>")
+EMAIL_FROM = os.getenv("EMAIL_FROM", "akant Team <onboarding@resend.dev>")
 
 # ─── Core ────────────────────────────────────────────────────────────────────
 SECRET_KEY = config("SECRET_KEY")
@@ -99,11 +100,19 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ─── Database ─────────────────────────────────────────────────────────────────
 # NOTE: SQLite will wipe data on every Render deploy. 
 # Consider switching to PostgreSQL for production.
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -182,7 +191,7 @@ CORS_ALLOW_HEADERS = [
 
 # ─── Spectacular (Swagger) ────────────────────────────────────────────────────
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Akant API",
+    "TITLE": "akant API",
     "DESCRIPTION": "Production-ready expense sharing API.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
@@ -210,7 +219,7 @@ EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Akant App <noreply@Akant.app>")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="akant App <noreply@akant.app>")
 
 # ─── Internationalization ─────────────────────────────────────────────────────
 LANGUAGE_CODE = "en-us"

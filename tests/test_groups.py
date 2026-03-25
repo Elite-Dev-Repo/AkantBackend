@@ -52,7 +52,7 @@ class TestGroupService:
         assert inactive_group not in groups
 
     def test_invite_creates_invite_record(self, db, group, user):
-        invitee_email = "invitee@Akant.test"
+        invitee_email = "invitee@akant.test"
         invite = GroupService.invite_member(group, user, invitee_email)
         assert invite.invited_email == invitee_email
         assert invite.status == GroupInvite.Status.PENDING
@@ -93,7 +93,7 @@ class TestGroupService:
         invite = GroupInviteFactory(
             group=group,
             invited_by=inviter,
-            invited_email="someone_else@Akant.test",
+            invited_email="someone_else@akant.test",
             expires_at=timezone.now() + timedelta(days=7),
         )
         with pytest.raises(ValueError, match="not sent to your email"):
@@ -172,11 +172,11 @@ class TestGroupAPI:
     def test_send_invite(self, auth_client, group):
         resp = auth_client.post(
             f"/api/v1/groups/{group.id}/invites/",
-            {"invited_email": "newperson@Akant.test"},
+            {"invited_email": "newperson@akant.test"},
         )
         assert resp.status_code == status.HTTP_201_CREATED
         assert GroupInvite.objects.filter(
-            group=group, invited_email="newperson@Akant.test"
+            group=group, invited_email="newperson@akant.test"
         ).exists()
 
     def test_accept_invite(self, auth_client2, group, user2):

@@ -20,14 +20,14 @@ pytestmark = pytest.mark.django_db
 MOCK_PAYSTACK_INIT = {
     "authorization_url": "https://checkout.paystack.com/test",
     "access_code": "abc123",
-    "reference": "Akant_test_ref_000001",
+    "reference": "akant_test_ref_000001",
 }
 
 MOCK_PAYSTACK_VERIFY = {
     "status": "success",
     "id": 12345,
     "channel": "card",
-    "reference": "Akant_test_ref_000001",
+    "reference": "akant_test_ref_000001",
     "amount": 10000,
 }
 
@@ -64,14 +64,14 @@ class TestPaymentService:
         )
         payment = PaymentFactory(
             debt=debt, payer=user2, recipient=user,
-            reference="Akant_verify_test", status=Payment.Status.PENDING
+            reference="akant_verify_test", status=Payment.Status.PENDING
         )
-        verify_data = {**MOCK_PAYSTACK_VERIFY, "reference": "Akant_verify_test"}
+        verify_data = {**MOCK_PAYSTACK_VERIFY, "reference": "akant_verify_test"}
         with patch(
             "apps.payments.services.PaystackClient.verify_transaction",
             return_value=verify_data,
         ):
-            updated = PaymentService.verify_and_settle("Akant_verify_test")
+            updated = PaymentService.verify_and_settle("akant_verify_test")
 
         assert updated.status == Payment.Status.SUCCESS
 
@@ -81,13 +81,13 @@ class TestPaymentService:
         )
         payment = PaymentFactory(
             debt=debt, payer=user2, recipient=user,
-            reference="Akant_idempotent_ref", status=Payment.Status.SUCCESS
+            reference="akant_idempotent_ref", status=Payment.Status.SUCCESS
         )
         # Should return early without calling Paystack again
         with patch(
             "apps.payments.services.PaystackClient.verify_transaction"
         ) as mock_verify:
-            result = PaymentService.verify_and_settle("Akant_idempotent_ref")
+            result = PaymentService.verify_and_settle("akant_idempotent_ref")
             mock_verify.assert_not_called()
 
         assert result.status == Payment.Status.SUCCESS

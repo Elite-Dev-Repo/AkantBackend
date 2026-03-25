@@ -20,7 +20,7 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    email = factory.Sequence(lambda n: f"user{n}@Akant.test")
+    email = factory.Sequence(lambda n: f"user{n}@akant.test")
     username = factory.Sequence(lambda n: f"user{n}")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
@@ -106,7 +106,7 @@ class PaymentFactory(DjangoModelFactory):
     recipient = factory.SubFactory(UserFactory)
     amount = factory.LazyFunction(lambda: Decimal("100.00"))
     currency = "NGN"
-    reference = factory.Sequence(lambda n: f"Akant_test_ref_{n:06d}")
+    reference = factory.Sequence(lambda n: f"akant_test_ref_{n:06d}")
     status = Payment.Status.PENDING
 
 

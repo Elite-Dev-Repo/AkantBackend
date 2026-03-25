@@ -91,21 +91,21 @@ class GroupService:
         invite_link = f"{frontend_url}/invite/accept?token={invite.token}"
         inviter_name = invite.invited_by.full_name or invite.invited_by.username
         group_name = invite.group.name
-        email_from = getattr(settings, "EMAIL_FROM", "Akant Team <onboarding@resend.dev>")
+        email_from = getattr(settings, "EMAIL_FROM", "akant Team <onboarding@resend.dev>")
 
         try:
             resend.Emails.send({
                 "from": email_from,
                 "to": [invite.invited_email],
-                "subject": f"You've been invited to join {group_name} on Akant",
+                "subject": f"You've been invited to join {group_name} on akant",
                 "html": f"""
                     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
                         <h2 style="color: #16a34a;">You've been invited! 🎉</h2>
                         <p>
                             <strong>{inviter_name}</strong> has invited you to join
-                            the group <strong>"{group_name}"</strong> on Akant.
+                            the group <strong>"{group_name}"</strong> on akant.
                         </p>
-                        <p>Akant makes splitting expenses effortless — track who owes what and settle up instantly.</p>
+                        <p>akant makes splitting expenses effortless — track who owes what and settle up instantly.</p>
                         <a href="{invite_link}"
                            style="display:inline-block; background:#16a34a; color:white;
                                   padding:12px 24px; border-radius:8px; text-decoration:none;
@@ -117,18 +117,18 @@ class GroupService:
                             Or copy this link: {invite_link}
                         </p>
                         <hr style="border:none; border-top:1px solid #eee;">
-                        <p style="color:#aaa; font-size:12px;">— The AkantTeam</p>
+                        <p style="color:#aaa; font-size:12px;">— The akantTeam</p>
                     </div>
                 """,
                 "text": f"""
-{inviter_name} has invited you to join "{group_name}" on Akant.
+{inviter_name} has invited you to join "{group_name}" on akant.
 
 Accept your invitation here:
 {invite_link}
 
 This invite expires in 7 days.
 
-— The Akant Team
+— The akant Team
                 """.strip(),
             })
             print(f"[INVITE] Email sent to {invite.invited_email}")

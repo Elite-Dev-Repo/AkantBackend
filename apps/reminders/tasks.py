@@ -1,5 +1,5 @@
 """
-Celery tasks for Akant app.
+Celery tasks for akant app.
 Scheduled via django-celery-beat (stored in DB, configurable from admin).
 """
 import logging

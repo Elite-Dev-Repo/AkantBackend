@@ -6,16 +6,16 @@ services:
     image: postgres:15-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME:-Akant_db}
-      POSTGRES_USER: ${DB_USER:-Akant_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-Akant_password}
+      POSTGRES_DB: ${DB_NAME:-akant_db}
+      POSTGRES_USER: ${DB_USER:-akant_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-akant_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "pg_isready -U ${DB_USER:-Akant_user} -d ${DB_NAME:-Akant_db}",
+          "pg_isready -U ${DB_USER:-akant_user} -d ${DB_NAME:-akant_db}",
         ]
       interval: 10s
       timeout: 5s
