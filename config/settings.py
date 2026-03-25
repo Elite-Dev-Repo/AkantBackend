@@ -1,27 +1,37 @@
 """
 Akant App - Production-Ready Django Settings
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-import os
-from dotenv import load_dotenv
-
-
+# Load local .env file if it exists
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-# Now assign them to Django settings
+# ─── Environment Variables ────────────────────────────────────────────────────
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 EMAIL_FROM = os.getenv("EMAIL_FROM", "Akant Team <onboarding@resend.dev>")
 
 # ─── Core ────────────────────────────────────────────────────────────────────
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
+
+# Dynamically build ALLOWED_HOSTS
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akantbackend.onrender.com", cast=Csv())
+
+# Render-specific environment variable for zero-config deploys
+RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Ensure local dev always works
+for host in ['localhost', '127.0.0.1', '0.0.0.0']:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 
 # ─── Apps ─────────────────────────────────────────────────────────────────────
 DJANGO_APPS = [
@@ -87,14 +97,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # ─── Database ─────────────────────────────────────────────────────────────────
-
+# NOTE: SQLite will wipe data on every Render deploy. 
+# Consider switching to PostgreSQL for production.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 AUTH_USER_MODEL = "users.User"
@@ -145,10 +155,17 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-# ─── CORS ─────────────────────────────────────────────────────────────────────
+# ─── CORS & CSRF ──────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
     config("FRONTEND_URL", default="https://akant.vercel.app"),
 ]
+
+# Required for Django 6.0 production security
+CSRF_TRUSTED_ORIGINS = [
+    config("FRONTEND_URL", default="https://akant.vercel.app"),
+    "https://akantbackend.onrender.com",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "accept",
@@ -166,19 +183,10 @@ CORS_ALLOW_HEADERS = [
 # ─── Spectacular (Swagger) ────────────────────────────────────────────────────
 SPECTACULAR_SETTINGS = {
     "TITLE": "Akant API",
-    "DESCRIPTION": "Production-ready expense sharing API — split Akant, track debts, pay with Paystack.",
+    "DESCRIPTION": "Production-ready expense sharing API.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
-    "TAGS": [
-        {"name": "auth", "description": "Authentication & registration"},
-        {"name": "users", "description": "User profile management"},
-        {"name": "groups", "description": "Expense groups"},
-        {"name": "expenses", "description": "Shared expenses"},
-        {"name": "payments", "description": "Paystack payment integration"},
-        {"name": "reports", "description": "Monthly expense reports"},
-        {"name": "reminders", "description": "Debt reminder system"},
-    ],
 }
 
 # ─── Celery ───────────────────────────────────────────────────────────────────
