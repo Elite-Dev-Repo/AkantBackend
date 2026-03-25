@@ -32,7 +32,7 @@ class TestUserModel:
 
     def test_create_superuser(self):
         su = User.objects.create_superuser(
-            email="admin@bills.test",
+            email="admin@Akant.test",
             username="admin",
             first_name="Super",
             last_name="User",
@@ -60,7 +60,7 @@ class TestRegistration:
 
     def test_register_success(self, api_client):
         payload = {
-            "email": "newuser@bills.test",
+            "email": "newuser@Akant.test",
             "username": "newuser",
             "first_name": "New",
             "last_name": "User",
@@ -70,11 +70,11 @@ class TestRegistration:
         resp = api_client.post(self.url, payload)
         assert resp.status_code == status.HTTP_201_CREATED
         assert resp.data["success"] is True
-        assert User.objects.filter(email="newuser@bills.test").exists()
+        assert User.objects.filter(email="newuser@Akant.test").exists()
 
     def test_register_password_mismatch(self, api_client):
         payload = {
-            "email": "x@bills.test",
+            "email": "x@Akant.test",
             "username": "xuser",
             "first_name": "X",
             "last_name": "User",
@@ -98,7 +98,7 @@ class TestRegistration:
 
     def test_register_weak_password(self, api_client):
         payload = {
-            "email": "weak@bills.test",
+            "email": "weak@Akant.test",
             "username": "weakuser",
             "first_name": "Weak",
             "last_name": "User",
@@ -125,7 +125,7 @@ class TestLogin:
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_login_unknown_email(self, api_client):
-        resp = api_client.post(self.url, {"email": "ghost@bills.test", "password": "any"})
+        resp = api_client.post(self.url, {"email": "ghost@Akant.test", "password": "any"})
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
 
 

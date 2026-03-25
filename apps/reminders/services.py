@@ -53,8 +53,8 @@ class ReminderService:
             f"Hi {debtor.first_name},\n\n"
             f"Just a friendly reminder that you owe {creditor.full_name} "
             f"₦{debt.amount:,.2f} in the group '{debt.group.name}'.\n\n"
-            f"Head over to Bills to settle up: {settings.FRONTEND_URL}/groups/{debt.group_id}/debts\n\n"
-            f"— The Bills Team"
+            f"Head over to Akant to settle up: {settings.FRONTEND_URL}/groups/{debt.group_id}/debts\n\n"
+            f"— The Akant Team"
         )
 
         success = True

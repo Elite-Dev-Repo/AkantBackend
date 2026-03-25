@@ -74,5 +74,5 @@ class PaystackClient:
         return hmac.compare_digest(expected, signature)
 
     @staticmethod
-    def generate_reference(prefix: str = "bills") -> str:
+    def generate_reference(prefix: str = "Akant") -> str:
         return f"{prefix}_{uuid.uuid4().hex[:16]}"

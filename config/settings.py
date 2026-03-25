@@ -1,5 +1,5 @@
 """
-Bills App - Production-Ready Django Settings
+Akant App - Production-Ready Django Settings
 """
 from datetime import timedelta
 from pathlib import Path
@@ -166,7 +166,7 @@ CORS_ALLOW_HEADERS = [
 # ─── Spectacular (Swagger) ────────────────────────────────────────────────────
 SPECTACULAR_SETTINGS = {
     "TITLE": "Akant API",
-    "DESCRIPTION": "Production-ready expense sharing API — split bills, track debts, pay with Paystack.",
+    "DESCRIPTION": "Production-ready expense sharing API — split Akant, track debts, pay with Paystack.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
@@ -202,7 +202,7 @@ EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Bills App <noreply@bills.app>")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Akant App <noreply@Akant.app>")
 
 # ─── Internationalization ─────────────────────────────────────────────────────
 LANGUAGE_CODE = "en-us"

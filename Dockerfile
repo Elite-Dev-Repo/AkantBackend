@@ -23,9 +23,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . .
 
 # Create non-root user
-RUN addgroup --system bills && adduser --system --group bills
-RUN chown -R bills:bills /app
-USER bills
+RUN addgroup --system Akant && adduser --system --group Akant
+RUN chown -R Akant:Akant /app
+USER Akant
 
 # Collect static files
 RUN python manage.py collectstatic --noinput || true
