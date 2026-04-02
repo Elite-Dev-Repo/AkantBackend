@@ -9,6 +9,8 @@ from rest_framework.routers import DefaultRouter
 
 from apps.expenses.views import ExpenseViewSet, DebtViewSet
 
+from apps.users.views import AccountDetailsView, getAccountDetailsView
+
 # Nested routes: /api/v1/groups/{group_pk}/expenses/ etc.
 group_nested_router = DefaultRouter()
 group_nested_router.register(r"expenses", ExpenseViewSet, basename="group-expenses")
@@ -22,6 +24,10 @@ urlpatterns = [
 
     # Users
     path("api/v1/users/", include("apps.users.urls.users")),
+
+    # Accounts   
+    path("api/v1/account_details/", AccountDetailsView.as_view(), name="account-details"),
+        path("api/v1/account_details/<uuid:user>/", getAccountDetailsView.as_view(), name="get-account-details"),
 
     # Groups
     path("api/v1/groups/", include("apps.groups.urls.groups")),

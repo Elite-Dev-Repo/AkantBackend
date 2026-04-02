@@ -5,6 +5,11 @@ from django.utils import timezone
 from .managers import UserManager
 
 
+
+
+
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, db_index=True)
@@ -36,3 +41,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
+
+
+
+
+
+class AccountDetails(models.Model):
+    id =  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    account_name = models.CharField(max_length=255)
+    account_number = models.CharField(max_length=15)
+    bank_name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="account_details_user", null=True, blank=True)
+
+    class Meta:
+        db_table = "account_details"
+
+    def __str__(self):
+        return f"{self.account_name} <{self.account_number}>"
+    

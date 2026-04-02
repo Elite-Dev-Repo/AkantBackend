@@ -2,12 +2,13 @@ from rest_framework import viewsets, generics, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from .models import User
+from .models import User, AccountDetails
 from .serializers import (
     UserRegistrationSerializer,
     UserProfileSerializer,
     UserPublicSerializer,
     ChangePasswordSerializer,
+    AccountDetailsSerializer,
 )
 
 
@@ -78,3 +79,21 @@ class UserViewSet(viewsets.GenericViewSet):
         user = self.get_object()
         serializer = UserPublicSerializer(user)
         return Response({"success": True, "data": serializer.data})
+
+
+class AccountDetailsView(generics.CreateAPIView):
+    queryset = AccountDetails.objects.all()
+    serializer_class = AccountDetailsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+    
+class getAccountDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AccountDetails.objects.all()
+    serializer_class = AccountDetailsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "user"

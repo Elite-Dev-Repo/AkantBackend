@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from .models import Group, GroupMembership, GroupInvite
 from .serializers import (
@@ -140,9 +141,18 @@ class GroupViewSet(viewsets.ModelViewSet):
             )
         except ValueError as e:
             return Response({"success": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
+        invite_link = f"{frontend_url}/invite/accept?token={invite.token}"
+
         out = GroupInviteSerializer(invite, context={"request": request})
         return Response(
-            {"success": True, "message": "Invite sent.", "data": out.data},
+            {
+                "success": True,
+                "message": "Invite sent.",
+                "data": out.data,
+                "invite_link": invite_link,
+            },
             status=status.HTTP_201_CREATED,
         )
 

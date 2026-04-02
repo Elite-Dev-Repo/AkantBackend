@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import User
+from .models import User, AccountDetails
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -48,3 +48,16 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs["new_password"] != attrs["new_password_confirm"]:
             raise serializers.ValidationError({"new_password_confirm": "Passwords do not match."})
         return attrs
+
+
+
+class AccountDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AccountDetails
+        fields = "__all__"
+        read_only_fields = ["id", "user"]
+       
+
+    def create(self, validated_data):
+        return AccountDetails.objects.create(**validated_data)

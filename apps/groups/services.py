@@ -136,6 +136,9 @@ This invite expires in 7 days.
             # Don't crash the invite creation if email fails
             print(f"[INVITE] Email failed: {e}. Token: {invite.token}")
 
+
+
+
     @staticmethod
     @transaction.atomic
     def accept_invite(token: str, user: User) -> GroupMembership:
@@ -143,6 +146,7 @@ This invite expires in 7 days.
             invite = GroupInvite.objects.select_related("group").get(
                 token=token,
                 status=GroupInvite.Status.PENDING,
+
             )
         except GroupInvite.DoesNotExist:
             raise ValueError("Invalid or expired invite token.")
