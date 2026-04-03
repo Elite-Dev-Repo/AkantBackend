@@ -3,6 +3,20 @@ from django.contrib.auth.password_validation import validate_password
 from .models import User, AccountDetails
 
 
+class AccountDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountDetails
+        fields = ["id", "account_name", "account_number", "bank_name"]
+        read_only_fields = ["id"]
+
+
+class AccountDetailsWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountDetails
+        fields = ["id", "account_name", "account_number", "bank_name"]
+        read_only_fields = ["id"]
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     password_confirm = serializers.CharField(write_only=True)
@@ -31,7 +45,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
-    """Minimal serializer for embedding in other resources."""
     full_name = serializers.ReadOnlyField()
 
     class Meta:
@@ -48,16 +61,3 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs["new_password"] != attrs["new_password_confirm"]:
             raise serializers.ValidationError({"new_password_confirm": "Passwords do not match."})
         return attrs
-
-
-
-class AccountDetailsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AccountDetails
-        fields = "__all__"
-        read_only_fields = ["id", "user"]
-       
-
-    def create(self, validated_data):
-        return AccountDetails.objects.create(**validated_data)

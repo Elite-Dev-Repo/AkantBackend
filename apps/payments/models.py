@@ -60,3 +60,48 @@ class Payment(models.Model):
     def amount_kobo(self):
         """Paystack uses smallest currency unit (kobo for NGN)."""
         return int(self.amount * 100)
+
+
+
+
+class BankTransferPayment(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        CONFIRMED = "confirmed", "Confirmed"
+        DISPUTED = "disputed", "Disputed"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    debt = models.ForeignKey(
+        "expenses.Debt",
+        on_delete=models.CASCADE,
+        related_name="bank_transfer_payments",
+    )
+    payer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="bank_transfers_made",
+    )
+    creditor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="bank_transfers_received",
+    )
+    account_details = models.ForeignKey(
+        "users.AccountDetails",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="transfer_payments",
+    )
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    note = models.TextField(blank=True, default="")
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "bank_transfer_payments"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.payer} → {self.creditor} ₦{self.amount} ({self.status})"
