@@ -22,7 +22,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 # Dynamically build ALLOWED_HOSTS
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akantbackend.onrender.com", cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akant-backend.vercel.app", cast=Csv())
 
 # Render-specific environment variable for zero-config deploys
 RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
