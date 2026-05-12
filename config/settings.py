@@ -22,7 +22,7 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 # Dynamically build ALLOWED_HOSTS
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akant-backend.vercel.app", cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="akantbackend.onrender.com", cast=Csv())
 
 # Render-specific environment variable for zero-config deploys
 RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
@@ -117,18 +117,26 @@ DB_HOST = os.getenv("host")
 DB_PORT = os.getenv("port")
 DB_NAME = os.getenv("dbname")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
-    }
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql',
+   #     'NAME': DB_NAME,
+    #    'USER': DB_USER,
+     #   'PASSWORD': DB_PASSWORD,
+      #  'HOST': DB_HOST,
+       # 'PORT': DB_PORT,
+        #'OPTIONS': {
+       #     'sslmode': 'require',
+       # },
+   # }
+#}
+
+DATABASES={
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
