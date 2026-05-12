@@ -191,12 +191,12 @@ SIMPLE_JWT = {
 
 # ─── CORS & CSRF ──────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
-    config("FRONTEND_URL", default="https://akant.vercel.app"),
+   "https://akant.vercel.app"
 ]
 
 # Required for Django 6.0 production security
 CSRF_TRUSTED_ORIGINS = [
-    config("FRONTEND_URL", default="https://akant.vercel.app")
+    "https://akant.vercel.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
